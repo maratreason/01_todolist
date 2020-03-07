@@ -1,14 +1,26 @@
-import React, {Component} from 'react';
+import React, { PureComponent } from "react"
+import styled from "styled-components"
+import { Input } from "../../../../components/UI/Input/Input"
+import { AddButton } from "../../../../components/UI/Button/Button"
 
-class AddItemBlock extends Component {
+class AddItemBlock extends PureComponent {
   render() {
+    const { changeTaskHandler, title, addTaskHandler } = this.props
+
     return (
-      <div>
-        <input type="text"/>
-        <button>Add item</button>
-      </div>
-    );
+      <Wrapper>
+        <Input type="text" onChange={changeTaskHandler} value={title} />
+        <AddButton type="default" onClick={addTaskHandler}>
+          Add item
+        </AddButton>
+      </Wrapper>
+    )
   }
 }
 
-export default AddItemBlock;
+export default AddItemBlock
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`

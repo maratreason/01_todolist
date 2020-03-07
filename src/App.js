@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react"
 
-import {Container} from "./components/UI/Container/Container";
-import Dashboard from "./containers/Dashboard/Dashboard";
+import { Container } from "./components/UI/Container/Container"
+import Dashboard from "./containers/Dashboard/Dashboard"
 
 function App() {
   return (
@@ -11,4 +11,4 @@ function App() {
   )
 }
 
-export default App;
+export default App
