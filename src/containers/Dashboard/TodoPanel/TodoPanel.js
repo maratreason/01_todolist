@@ -1,23 +1,43 @@
-import React, {Component} from 'react';
-import styled from 'styled-components'
+import React, { PureComponent } from "react"
+import styled from "styled-components"
 
-import AddItemBlock from "./AddItemBlock/AddItemBlock";
-import FilterBlock from "./FilterBlock/FilterBlock";
-import SearchBlock from "./SearchBlock/SearchBlock";
+import AddItemBlock from "./AddItemBlock/AddItemBlock"
+import FilterBlock from "./FilterBlock/FilterBlock"
+import SearchBlock from "./SearchBlock/SearchBlock"
 
-class TodoPanel extends Component {
+class TodoPanel extends PureComponent {
   render() {
+    const {
+      changeTaskHandler,
+      searchTitle,
+      addTaskHandler,
+      onSearchChange,
+      title,
+      onRadioChange,
+    } = this.props
+
     return (
       <Wrapper>
-        <AddItemBlock />
-        <FilterBlock />
-        <SearchBlock />
+        <AddItemBlock
+          changeTaskHandler={changeTaskHandler}
+          title={title}
+          addTaskHandler={addTaskHandler}
+        />
+        <FilterBlock onRadioChange={onRadioChange} />
+        <SearchBlock
+          searchTitle={searchTitle}
+          onSearchChange={onSearchChange}
+        />
       </Wrapper>
-    );
+    )
   }
 }
 
-export default TodoPanel;
+export default TodoPanel
 
 const Wrapper = styled.div`
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
 `

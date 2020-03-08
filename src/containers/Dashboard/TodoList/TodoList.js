@@ -1,17 +1,38 @@
-import React, {Component} from 'react';
+import React, { Component } from "react"
+import styled from "styled-components"
 
-import TodoItem from "./TodoItem/TodoItem";
+import TodoItem from "./TodoItem/TodoItem"
 
 class TodoList extends Component {
   render() {
-    const { todos } = this.props
+    const {
+      todos,
+      isDoneTaskHandler,
+      removeTaskHandler,
+      search,
+      searchTitle,
+    } = this.props
+
+    const items = search(todos, searchTitle)
 
     return (
-      <div>
-        {todos.map((item) => <TodoItem key={item.id} {...item} />)}
-      </div>
-    );
+      <Wrapper>
+        {items.map(item => (
+          <TodoItem
+            key={item.id}
+            {...item}
+            isDoneTaskHandler={isDoneTaskHandler}
+            removeTaskHandler={removeTaskHandler}
+          />
+        ))}
+      </Wrapper>
+    )
   }
 }
 
-export default TodoList;
+export default TodoList
+
+const Wrapper = styled.div`
+  width: 800px;
+  overflow: hidden;
+`

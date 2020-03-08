@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import styled from 'styled-components'
+import React, { Component } from "react"
+import styled from "styled-components"
 
 class Radio extends Component {
   render() {
@@ -16,11 +16,11 @@ class Radio extends Component {
           onChange={onChange}
         />
       </Wrapper>
-    );
+    )
   }
 }
 
-export default Radio;
+export default Radio
 
 const Wrapper = styled.div`
   padding: 5px;
