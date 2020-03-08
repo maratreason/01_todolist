@@ -7,7 +7,14 @@ import SearchBlock from "./SearchBlock/SearchBlock"
 
 class TodoPanel extends PureComponent {
   render() {
-    const { changeTaskHandler, title, addTaskHandler } = this.props
+    const {
+      changeTaskHandler,
+      searchTitle,
+      addTaskHandler,
+      onSearchChange,
+      title,
+      onRadioChange,
+    } = this.props
 
     return (
       <Wrapper>
@@ -16,8 +23,11 @@ class TodoPanel extends PureComponent {
           title={title}
           addTaskHandler={addTaskHandler}
         />
-        <FilterBlock />
-        <SearchBlock />
+        <FilterBlock onRadioChange={onRadioChange} />
+        <SearchBlock
+          searchTitle={searchTitle}
+          onSearchChange={onSearchChange}
+        />
       </Wrapper>
     )
   }

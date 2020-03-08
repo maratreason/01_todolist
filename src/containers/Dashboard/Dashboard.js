@@ -11,6 +11,7 @@ class Dashboard extends Component {
       { id: 3, title: "Learn Polymer", done: false },
     ],
     title: "",
+    searchTitle: "",
   }
 
   addTaskHandler = () => {
@@ -53,19 +54,55 @@ class Dashboard extends Component {
     this.setState({ todos: updatedTodos })
   }
 
+  search = (array, searchWord) => {
+    if (searchWord.length === 0) return array
+    return array.filter(
+      item => item.title.toLowerCase().indexOf(searchWord.toLowerCase()) > -1,
+    )
+  }
+
+  onSearchChange = event => {
+    event.preventDefault()
+    const searchTitle = event.target.value
+    this.setState({ searchTitle })
+  }
+
+  onRadioChange = event => {
+    const { todos } = this.state
+
+    const updatedTodos = todos.filter(todo => {
+      if (event.target.id === "completed") {
+        return todo.done
+      } else if (event.target.id === "uncompleted") {
+        return !todo.done
+      }
+      return todo
+    })
+
+    this.setState({ todos: updatedTodos })
+  }
+
   render() {
-    const { todos, title } = this.state
+    const { todos, title, searchTitle } = this.state
 
     return (
       <>
         <TodoPanel
           changeTaskHandler={this.changeTaskHandler}
+          todos={todos}
+          searchTitle={searchTitle}
           title={title}
           addTaskHandler={this.addTaskHandler}
+          onSearchChange={this.onSearchChange}
+          search={this.search}
+          onRadioChange={this.onRadioChange}
         />
         <h2>Список дел.</h2>
         <TodoList
           todos={todos}
+          search={this.search}
+          title={title}
+          searchTitle={searchTitle}
           isDoneTaskHandler={this.isDoneTaskHandler}
           removeTaskHandler={this.removeTaskHandler}
         />

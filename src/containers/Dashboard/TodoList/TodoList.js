@@ -5,11 +5,19 @@ import TodoItem from "./TodoItem/TodoItem"
 
 class TodoList extends Component {
   render() {
-    const { todos, isDoneTaskHandler, removeTaskHandler } = this.props
+    const {
+      todos,
+      isDoneTaskHandler,
+      removeTaskHandler,
+      search,
+      searchTitle,
+    } = this.props
+
+    const items = search(todos, searchTitle)
 
     return (
       <Wrapper>
-        {todos.map(item => (
+        {items.map(item => (
           <TodoItem
             key={item.id}
             {...item}

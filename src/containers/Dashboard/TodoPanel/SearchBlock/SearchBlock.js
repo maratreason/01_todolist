@@ -4,10 +4,16 @@ import { SearchInput } from "../../../../components/UI/Input/Input"
 
 class SearchBlock extends PureComponent {
   render() {
+    const { onSearchChange, searchTitle } = this.props
     return (
       <Wrapper>
         <label htmlFor="search">Search</label>
-        <SearchInput id="search" type="text" />
+        <SearchInput
+          id="search"
+          type="text"
+          onChange={onSearchChange}
+          value={searchTitle}
+        />
       </Wrapper>
     )
   }
