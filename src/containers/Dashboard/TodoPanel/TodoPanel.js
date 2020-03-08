@@ -14,6 +14,7 @@ class TodoPanel extends PureComponent {
       onSearchChange,
       title,
       onRadioChange,
+      filterByCompleteness,
     } = this.props
 
     return (
@@ -23,7 +24,10 @@ class TodoPanel extends PureComponent {
           title={title}
           addTaskHandler={addTaskHandler}
         />
-        <FilterBlock onRadioChange={onRadioChange} />
+        <FilterBlock
+          onRadioChange={onRadioChange}
+          filterByCompleteness={filterByCompleteness}
+        />
         <SearchBlock
           searchTitle={searchTitle}
           onSearchChange={onSearchChange}
