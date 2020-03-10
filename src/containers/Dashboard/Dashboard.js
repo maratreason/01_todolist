@@ -1,27 +1,27 @@
-import React, {Component} from 'react';
+import React, { PureComponent } from "react"
+import { connect } from "react-redux"
 
-import TodoPanel from "./TodoPanel/TodoPanel";
-import TodoList from "./TodoList/TodoList";
+import TodoPanel from "./TodoPanel/TodoPanel"
+import TodoList from "./TodoList/TodoList"
 
-class Dashboard extends Component {
-  state = {
-    todos: [
-      { id: 1, title: "Learn React", done: false },
-      { id: 2, title: "Learn Vue", done: true },
-      { id: 3, title: "Learn Polymer", done: false },
-    ]
-  }
-
+class Dashboard extends PureComponent {
   render() {
-    const { todos } = this.state
+    console.log("dashboard render")
+    const { todos } = this.props
 
     return (
       <>
         <TodoPanel />
         <TodoList todos={todos} />
       </>
-    );
+    )
   }
 }
 
-export default Dashboard;
+const mapStateToProps = state => {
+  return {
+    todos: state.todos.filtered,
+  }
+}
+
+export default connect(mapStateToProps)(Dashboard)

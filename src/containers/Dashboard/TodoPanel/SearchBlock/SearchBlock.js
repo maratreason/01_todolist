@@ -1,14 +1,46 @@
-import React, {Component} from 'react';
+import React, { Component } from "react"
+import { connect } from "react-redux"
+import styled from "styled-components"
+import { searchTodo } from "../../../../store/actions/todos"
+import { SearchInput } from "../../../../components/UI/Input/Input"
 
 class SearchBlock extends Component {
+  state = {
+    value: "",
+  }
+
+  changeTitleFilter = event => {
+    const { searchByTitle } = this.props
+    const { value } = event.target
+    searchByTitle(value)
+    this.setState({ value })
+  }
+
   render() {
+    const { value } = this.state
+
     return (
-      <div>
+      <Wrapper>
         <label htmlFor="search">Search</label>
-        <input id="search" type="text" />
-      </div>
-    );
+        <SearchInput
+          onChange={this.changeTitleFilter}
+          id="search"
+          type="text"
+          value={value}
+        />
+      </Wrapper>
+    )
   }
 }
 
-export default SearchBlock;
+const mapDispatchToProps = dispatch => ({
+  searchByTitle: title => dispatch(searchTodo(title)),
+})
+
+export default connect(null, mapDispatchToProps)(SearchBlock)
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+`
