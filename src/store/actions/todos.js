@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "../../utils/axios"
 import { toast } from "react-toastify"
 import {
   FETCH_TODOLIST_SUCCESS,
@@ -18,10 +18,17 @@ import {
   UPDATE_TODO_FAILED,
 } from "./actionTypes"
 
+const options = {
+  type: toast.TYPE.SUCCESS,
+  hideProgressBar: true,
+  position: toast.POSITION.TOP_CENTER,
+  pauseOnHover: true,
+}
+
 export const fetchTodoList = () => dispatch => {
   dispatch(fetchTodoListStart())
   axios
-    .get("http://localhost:3001/todos")
+    .get("/todos")
     .then(response => {
       dispatch(fetchTodoListSuccess(response.data))
     })
@@ -51,10 +58,10 @@ export const fetchTodoListStart = () => ({
 export const addTodo = todo => dispatch => {
   dispatch(addTodotStart())
   axios
-    .post("http://localhost:3001/todos", todo)
+    .post("/todos", todo)
     .then(response => {
       dispatch(addTodoSuccess(response.data))
-      toast.success("New Item was added successfully!")
+      toast.success("New Item was added successfully!", options)
     })
     .catch(err => {
       toast.error(err.message)
@@ -82,7 +89,7 @@ export const addTodotStart = () => ({
 export const removeTodo = id => dispatch => {
   dispatch(removeTodoStart())
   axios
-    .delete(`http://localhost:3001/todos/${id}`)
+    .delete(`/todos/${id}`)
     .then(() => {
       dispatch(removeTodoSuccess(id))
       toast.success("The todo has been removed successfully!")
@@ -114,7 +121,7 @@ export const toggleTodo = (id, done) => dispatch => {
   dispatch(toggleTodoStart())
   axios
     .patch(
-      `http://localhost:3001/todos/${id}`,
+      `/todos/${id}`,
       { done: !done },
       {
         headers: {
@@ -153,7 +160,7 @@ export const updateTodo = (id, title) => dispatch => {
   dispatch(updateTodoStart())
   axios
     .patch(
-      `http://localhost:3001/todos/${id}`,
+      `/todos/${id}`,
       { title },
       {
         headers: {

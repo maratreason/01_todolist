@@ -2,12 +2,22 @@
   "todos": [
     {
       "id": 1,
-      "title": "Learn React 23",
-      "done": false
+      "title": "Learn React",
+      "done": true
     },
     {
       "id": 2,
       "title": "Learn Vue",
+      "done": false
+    },
+    {
+      "id": 698127,
+      "title": "Learn Javascript",
+      "done": false
+    },
+    {
+      "id": 404908,
+      "title": "Learn Redux",
       "done": false
     }
   ]
