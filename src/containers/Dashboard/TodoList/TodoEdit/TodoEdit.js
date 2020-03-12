@@ -9,6 +9,7 @@ import EditForm from "../../../../components/EditForm/EditForm"
 class TodoItem extends Component {
   state = {
     editable: false,
+    done: false,
   }
 
   openFormHandler = () => {
@@ -16,8 +17,15 @@ class TodoItem extends Component {
     this.setState({ editable: !editable })
   }
 
+  toggleTodoItem = id => {
+    const { toggleItem } = this.props
+    const { done } = this.state
+    this.setState({ done: !done })
+    toggleItem(id, done)
+  }
+
   render() {
-    const { title, done, id, toggleItem, removeItem } = this.props
+    const { title, id, done, loading, removeItem } = this.props
     const { editable } = this.state
 
     return (
@@ -34,10 +42,14 @@ class TodoItem extends Component {
               {title}
             </Title>
             <div>
-              <Button type="info" onClick={() => toggleItem(id)}>
+              <Button type="info" onClick={() => this.toggleTodoItem(id)}>
                 Complete
               </Button>
-              <Button type="danger" onClick={() => removeItem(id)}>
+              <Button
+                disabled={loading}
+                type="danger"
+                onClick={() => removeItem(id)}
+              >
                 Delete
               </Button>
             </div>
@@ -48,12 +60,18 @@ class TodoItem extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    loading: state.todos.loadingPost,
+  }
+}
+
 const mapDispatchToProps = dispatch => ({
-  toggleItem: id => dispatch(toggleTodo(id)),
+  toggleItem: (id, done) => dispatch(toggleTodo(id, done)),
   removeItem: id => dispatch(removeTodo(id)),
 })
 
-export default connect(null, mapDispatchToProps)(TodoItem)
+export default connect(mapStateToProps, mapDispatchToProps)(TodoItem)
 
 const Wrapper = styled.div`
   display: flex;

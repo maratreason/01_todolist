@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
-import { addNewTodo } from "../../../../store/actions/todos"
+import { addTodo } from "../../../../store/actions/todos"
 import { Button } from "../../../../components/UI/Button/Button"
 import { Input } from "../../../../components/UI/Input/Input"
 
@@ -18,7 +18,7 @@ class AddItemBlock extends Component {
     const { addNewItem } = this.props
     const { value } = this.state
     addNewItem({
-      id: Math.random(),
+      id: Math.floor(Math.random() * 1000_000),
       title: value,
       done: false,
     })
@@ -27,11 +27,12 @@ class AddItemBlock extends Component {
 
   render() {
     const { value } = this.state
+    const { loading } = this.props
 
     return (
       <Wrapper>
         <Input type="text" onChange={this.changeInputHandler} value={value} />
-        <Button type="success" onClick={this.onClickHandler}>
+        <Button disabled={loading} type="success" onClick={this.onClickHandler}>
           Add item
         </Button>
       </Wrapper>
@@ -39,11 +40,17 @@ class AddItemBlock extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    loading: state.todos.loadingPost,
+  }
+}
+
 const mapDispatchToProps = dispatch => ({
-  addNewItem: todo => dispatch(addNewTodo(todo)),
+  addNewItem: todo => dispatch(addTodo(todo)),
 })
 
-export default connect(null, mapDispatchToProps)(AddItemBlock)
+export default connect(mapStateToProps, mapDispatchToProps)(AddItemBlock)
 
 const Wrapper = styled.div`
   display: flex;

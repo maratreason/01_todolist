@@ -27,7 +27,7 @@ class EditForm extends Component {
   }
 
   render() {
-    const { id } = this.props
+    const { id, loading } = this.props
     const { title } = this.state
 
     return (
@@ -37,9 +37,16 @@ class EditForm extends Component {
           type="text"
           onChange={this.changeInputHandler}
           value={title}
+          // onBlur={() => {
+          //   this.closeFormHandler()
+          // }}
         />
         <div>
-          <Button type="info" onClick={() => this.updateItemHandler(id)}>
+          <Button
+            disabled={loading}
+            type="info"
+            onClick={() => this.updateItemHandler(id)}
+          >
             Save
           </Button>
           <Button type="default" onClick={this.closeFormHandler}>
@@ -51,11 +58,17 @@ class EditForm extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    loading: state.todos.loadingPost,
+  }
+}
+
 const mapDispatchToProps = dispatch => ({
   updateItem: (id, title) => dispatch(updateTodo(id, title)),
 })
 
-export default connect(null, mapDispatchToProps)(EditForm)
+export default connect(mapStateToProps, mapDispatchToProps)(EditForm)
 
 const Wrapper = styled.div`
   display: flex;
