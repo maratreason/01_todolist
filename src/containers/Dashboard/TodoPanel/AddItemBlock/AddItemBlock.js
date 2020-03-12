@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
@@ -52,31 +51,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddItemBlock)
-=======
-import React, { PureComponent } from "react"
-import styled from "styled-components"
-import { Input } from "../../../../components/UI/Input/Input"
-import { AddButton } from "../../../../components/UI/Button/Button"
-
-class AddItemBlock extends PureComponent {
-  // state is here
-
-  render() {
-    const { changeTaskHandler, title, addTaskHandler } = this.props
-
-    return (
-      <Wrapper>
-        <Input type="text" onChange={changeTaskHandler} value={title} />
-        <AddButton type="default" onClick={addTaskHandler}>
-          Add item
-        </AddButton>
-      </Wrapper>
-    )
-  }
-}
-
-export default AddItemBlock
->>>>>>> 50d70896c4a9e94f4949f2b6f972b4c35e64e2d3
 
 const Wrapper = styled.div`
   display: flex;

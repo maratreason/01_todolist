@@ -5,11 +5,7 @@ export const Button = styled.button`
     if (props.type === "info") return "#66CCFF"
     if (props.type === "success") return "#33CC66"
     if (props.type === "danger") return "orangered"
-<<<<<<< HEAD
     if (props.type === "default") return "#CCCC99"
-=======
-    if (props.type === "default") return "#66CCFF"
->>>>>>> 50d70896c4a9e94f4949f2b6f972b4c35e64e2d3
   }};
   width: 100px;
   padding: 10px;
