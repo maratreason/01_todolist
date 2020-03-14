@@ -1,5 +1,5 @@
-import axios from "../../utils/axios"
 import { toast } from "react-toastify"
+import axios from "../../utils/axios"
 import {
   FETCH_TODOLIST_SUCCESS,
   FETCH_TODOLIST_FAILED,
@@ -16,6 +16,7 @@ import {
   UPDATE_TODO_START,
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILED,
+  FETCH_TODOLIST_LENGTH_SUCCESS,
 } from "./actionTypes"
 
 const options = {
@@ -25,10 +26,23 @@ const options = {
   pauseOnHover: true,
 }
 
-export const fetchTodoList = () => dispatch => {
-  dispatch(fetchTodoListStart())
+export const getTodosLength = () => dispatch => {
   axios
     .get("/todos")
+    .then(response => {
+      dispatch(fetchTodoListLengthSuccess(response.data.length))
+    })
+    .catch(err => {
+      toast.error(err.message)
+      dispatch(fetchTodoListFailed(err))
+    })
+}
+
+export const fetchTodoList = (page, limit) => dispatch => {
+  dispatch(fetchTodoListStart())
+
+  axios
+    .get(`/todos?_page=${page}&_limit=${limit}`)
     .then(response => {
       dispatch(fetchTodoListSuccess(response.data))
     })
@@ -37,6 +51,11 @@ export const fetchTodoList = () => dispatch => {
       dispatch(fetchTodoListFailed(err))
     })
 }
+
+export const fetchTodoListLengthSuccess = length => ({
+  type: FETCH_TODOLIST_LENGTH_SUCCESS,
+  length,
+})
 
 export const fetchTodoListSuccess = list => ({
   type: FETCH_TODOLIST_SUCCESS,

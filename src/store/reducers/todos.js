@@ -15,6 +15,7 @@ import {
   UPDATE_TODO_START,
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILED,
+  FETCH_TODOLIST_LENGTH_SUCCESS,
 } from "../actions/actionTypes"
 
 const initTodos = []
@@ -25,6 +26,9 @@ const initialState = {
   loadingGet: false,
   loadingPost: false,
   error: null,
+  currentPage: 1,
+  limit: 3,
+  todosLength: 0,
 }
 
 export const todos = (state = initialState, action) => {
@@ -133,6 +137,13 @@ export const todos = (state = initialState, action) => {
         ...state,
         origin: action.list,
         filtered: action.list,
+        loadingGet: false,
+      }
+
+    case FETCH_TODOLIST_LENGTH_SUCCESS:
+      return {
+        ...state,
+        todosLength: action.length,
         loadingGet: false,
       }
 

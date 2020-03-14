@@ -2,7 +2,7 @@
   "todos": [
     {
       "id": 1,
-      "title": "Learn React 1",
+      "title": "Learn React",
       "done": true
     },
     {
@@ -13,6 +13,41 @@
     {
       "id": 698127,
       "title": "Learn Javascript",
+      "done": false
+    },
+    {
+      "id": 331279,
+      "title": "Learn Redux",
+      "done": true
+    },
+    {
+      "id": 627462,
+      "title": "More practice on React!",
+      "done": true
+    },
+    {
+      "id": 540362,
+      "title": "Learn more about CORS ",
+      "done": false
+    },
+    {
+      "id": 624185,
+      "title": "Read more books in english",
+      "done": false
+    },
+    {
+      "id": 901151,
+      "title": "1",
+      "done": false
+    },
+    {
+      "id": 793239,
+      "title": "2",
+      "done": false
+    },
+    {
+      "id": 323068,
+      "title": "3",
       "done": false
     }
   ]
