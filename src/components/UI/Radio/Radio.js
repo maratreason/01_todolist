@@ -1,7 +1,7 @@
-import React, { Component } from "react"
+import React, { PureComponent } from "react"
 import styled from "styled-components"
 
-class Radio extends Component {
+class Radio extends PureComponent {
   render() {
     const { title, id, groupName, checked, onChange } = this.props
 

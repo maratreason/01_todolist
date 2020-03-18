@@ -2,10 +2,16 @@ import React, { PureComponent } from "react"
 import styled from "styled-components"
 
 import TodoItem from "./TodoEdit/TodoEdit"
+import Pagination from "../../../components/UI/Pagination/Pagination"
 
 class TodoList extends PureComponent {
+  onPageChanged = pageNumber => {
+    const { fetchData, limit } = this.props
+    fetchData(pageNumber, limit)
+  }
+
   render() {
-    const { todos } = this.props
+    const { todos, currentPage, limit, length } = this.props
 
     return (
       <Wrapper>
@@ -14,6 +20,13 @@ class TodoList extends PureComponent {
         ) : (
           <p>Список задач пуст</p>
         )}
+
+        <Pagination
+          onPageChanged={this.onPageChanged}
+          currentPage={currentPage}
+          limit={limit}
+          length={length}
+        />
       </Wrapper>
     )
   }

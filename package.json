@@ -6,21 +6,31 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "formik": "^2.1.4",
     "immutability-helper": "^3.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-redux": "^7.2.0",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "react-toastify": "^5.5.0",
     "redux": "^4.0.5",
-    "styled-components": "^5.0.1"
+    "styled-components": "^5.0.1",
+    "yup": "^0.28.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "json-server --watch --port=3001 ./src/db.json"
+    "nodeserver": "nodemon ./src/server.js",
+    "server": "json-server --watch --port=3001 ./src/db.json",
+    "serverauth": "json-server --watch --port=3001 ./src/db.json -m ./node_modules/json-server-auth -r routes.json"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -48,6 +58,7 @@
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-react-hooks": "^1.7.0",
     "json-server": "^0.16.1",
+    "json-server-auth": "^1.2.1",
     "prettier": "^1.19.1",
     "redux-thunk": "^2.3.0"
   }

@@ -3,7 +3,6 @@ import { connect } from "react-redux"
 import styled from "styled-components"
 import { updateTodo } from "../../store/actions/todos"
 import { Input } from "../UI/Input/Input"
-import { Button } from "../UI/Button/Button"
 
 class EditForm extends Component {
   state = {
@@ -11,14 +10,24 @@ class EditForm extends Component {
   }
 
   changeInputHandler = event => {
+    event.preventDefault()
     this.setState({ title: event.target.value })
+
+    this.updateItemHandler(event)
   }
 
-  updateItemHandler = id => {
+  updateItemHandler = event => {
+    const { id, updateItem } = this.props
     const { title } = this.state
-    const { updateItem, changeEditFormHandler } = this.props
-    updateItem(id, title)
-    changeEditFormHandler()
+
+    if (event.keyCode === 13) {
+      updateItem(id, title)
+      this.closeFormHandler()
+    }
+
+    if (event.keyCode === 27) {
+      this.closeFormHandler()
+    }
   }
 
   closeFormHandler = () => {
@@ -27,7 +36,6 @@ class EditForm extends Component {
   }
 
   render() {
-    const { id, loading } = this.props
     const { title } = this.state
 
     return (
@@ -37,22 +45,10 @@ class EditForm extends Component {
           type="text"
           onChange={this.changeInputHandler}
           value={title}
-          // onBlur={() => {
-          //   this.closeFormHandler()
-          // }}
+          onKeyDown={this.updateItemHandler}
+          onBlur={this.closeFormHandler}
+          autoFocus
         />
-        <div>
-          <Button
-            disabled={loading}
-            type="info"
-            onClick={() => this.updateItemHandler(id)}
-          >
-            Save
-          </Button>
-          <Button type="default" onClick={this.closeFormHandler}>
-            Cancel
-          </Button>
-        </div>
       </Wrapper>
     )
   }

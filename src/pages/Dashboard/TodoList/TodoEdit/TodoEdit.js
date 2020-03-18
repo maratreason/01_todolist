@@ -2,8 +2,9 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
 
-import { Button } from "../../../../components/UI/Button/Button"
 import { toggleTodo, removeTodo } from "../../../../store/actions/todos"
+
+import { Button } from "../../../../components/UI/Button/Button"
 import EditForm from "../../../../components/EditForm/EditForm"
 
 class TodoItem extends Component {
@@ -17,15 +18,21 @@ class TodoItem extends Component {
     this.setState({ editable: !editable })
   }
 
-  toggleTodoItem = id => {
-    const { toggleItem } = this.props
+  toggleTodoItem = () => {
+    const { toggleItem, id } = this.props
     const { done } = this.state
+
     this.setState({ done: !done })
     toggleItem(id, done)
   }
 
+  removeTodo = () => {
+    const { id, removeItem } = this.props
+    removeItem(id)
+  }
+
   render() {
-    const { title, id, done, loading, removeItem } = this.props
+    const { title, id, done, loading } = this.props
     const { editable } = this.state
 
     return (
@@ -37,23 +44,25 @@ class TodoItem extends Component {
             changeEditFormHandler={this.openFormHandler}
           />
         ) : (
-          <>
-            <Title done={done} onClick={this.openFormHandler}>
-              {title}
-            </Title>
-            <div>
-              <Button type="info" onClick={() => this.toggleTodoItem(id)}>
-                Complete
-              </Button>
-              <Button
-                disabled={loading}
-                type="danger"
-                onClick={() => removeItem(id)}
-              >
-                Delete
-              </Button>
-            </div>
-          </>
+          !loading && (
+            <>
+              <Title done={done} onClick={this.openFormHandler}>
+                {title}
+              </Title>
+              <div>
+                <Button buttonType="info" onClick={this.toggleTodoItem}>
+                  Complete
+                </Button>
+                <Button
+                  disabled={loading}
+                  buttonType="danger"
+                  onClick={this.removeTodo}
+                >
+                  Delete
+                </Button>
+              </div>
+            </>
+          )
         )}
       </Wrapper>
     )
@@ -88,6 +97,7 @@ const Title = styled.span`
   align-self: center;
   padding-left: 10px;
   position: relative;
+  width: 60%;
   &:after {
     /* content: ${props => (props.done ? "Done" : "")}; */
     content: "It's already done!";

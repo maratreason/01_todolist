@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
+
 import { addTodo } from "../../../../store/actions/todos"
+
 import { Button } from "../../../../components/UI/Button/Button"
 import { Input } from "../../../../components/UI/Input/Input"
 
@@ -17,22 +19,28 @@ class AddItemBlock extends Component {
   onClickHandler = () => {
     const { addNewItem } = this.props
     const { value } = this.state
-    addNewItem({
-      id: Math.floor(Math.random() * 1000_000),
-      title: value,
-      done: false,
-    })
+    if (value) {
+      addNewItem({
+        id: Math.floor(Math.random() * 1000_000),
+        title: value,
+        done: false,
+      })
+    }
+
     this.setState({ value: "" })
   }
 
   render() {
     const { value } = this.state
-    const { loading } = this.props
 
     return (
       <Wrapper>
         <Input type="text" onChange={this.changeInputHandler} value={value} />
-        <Button disabled={loading} type="success" onClick={this.onClickHandler}>
+        <Button
+          disabled={!value}
+          buttonType={value ? "success" : "default"}
+          onClick={this.onClickHandler}
+        >
           Add item
         </Button>
       </Wrapper>

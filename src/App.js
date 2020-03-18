@@ -1,27 +1,22 @@
 import React from "react"
-import { ToastContainer, toast } from "react-toastify"
-import { Container } from "./components/UI/Container/Container"
-import Dashboard from "./containers/Dashboard/Dashboard"
+import { Switch, Route } from "react-router-dom"
 
-import "react-toastify/dist/ReactToastify.css"
+import Toastify from "./components/Toastify/Toastify"
+import { Container } from "./components/UI/Container/Container"
+import Login from "./components/Login/Login"
+
+import Dashboard from "./pages/Dashboard/Dashboard"
+import Page404 from "./pages/Page404/Page404"
 
 function App() {
   return (
     <Container>
-      <ToastContainer
-        draggablePercent={80}
-        autoClose={2000}
-        position={toast.POSITION.TOP_CENTER}
-        style={{
-          width: "1000px",
-          margin: "0 auto",
-          left: "50%",
-          transform: "translate(-50%, 0)",
-          textAlign: "center",
-          fontSize: "1.2rem",
-        }}
-      />
-      <Dashboard />
+      <Toastify />
+      <Switch>
+        <Route path="/login" component={Login} />
+        <Route path="/" exact component={Dashboard} />
+        <Route path="*" component={Page404} />
+      </Switch>
     </Container>
   )
 }

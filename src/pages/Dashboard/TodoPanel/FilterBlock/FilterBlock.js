@@ -1,9 +1,10 @@
 import React, { PureComponent } from "react"
-import styled from "styled-components"
 import { connect } from "react-redux"
+import styled from "styled-components"
+
+import { filterTodo, fetchTodoList } from "../../../../store/actions/todos"
 
 import Radio from "../../../../components/UI/Radio/Radio"
-import { changeBtn } from "../../../../store/actions/todos"
 
 class FilterBlock extends PureComponent {
   state = {
@@ -11,10 +12,24 @@ class FilterBlock extends PureComponent {
   }
 
   onChangeHandler = event => {
-    const { changeRadioBtn } = this.props
+    const { filter } = this.props
     const { id } = event.target
 
-    changeRadioBtn(id)
+    switch (id) {
+      case "all":
+        filter(null)
+        break
+      case "completed":
+        filter(true)
+        break
+      case "uncompleted":
+        filter(false)
+        break
+      default:
+        filter(null)
+        break
+    }
+
     this.setState({ value: id })
   }
 
@@ -50,7 +65,7 @@ class FilterBlock extends PureComponent {
 }
 
 const mapDispatchToProps = dispatch => ({
-  changeRadioBtn: id => dispatch(changeBtn(id)),
+  filter: done => dispatch(fetchTodoList({ done })),
 })
 
 export default connect(null, mapDispatchToProps)(FilterBlock)

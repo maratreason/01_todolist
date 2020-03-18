@@ -11,3 +11,16 @@ export const SearchInput = styled(Input)`
   margin-top: 0.5rem;
   max-width: 100%;
 `
+
+export const Checkbox = styled.div`
+  max-width: 100%;
+  display: flex;
+
+  label {
+    order: 1;
+  }
+
+  input {
+    margin-right: 5px;
+  }
+`
