@@ -11,11 +11,11 @@ class TodoItem extends PureComponent {
       <Wrapper>
         <Title done={done}>{title}</Title>
         <div>
-          <Button onClick={() => isDoneTaskHandler(id)} type="info">
+          <Button buttonType="info" onClick={() => isDoneTaskHandler(id)}>
             Toggle
           </Button>
-          <Button type="success">Edit</Button>
-          <Button onClick={() => removeTaskHandler(id)} type="danger">
+          <Button buttonType="success">Edit</Button>
+          <Button buttonType="danger" onClick={() => removeTaskHandler(id)}>
             Delete
           </Button>
         </div>

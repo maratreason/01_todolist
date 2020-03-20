@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "email": "test@test.ru",
+      "password": "$2a$10$DPQat0LOZPtrDA/KxUZjEuS3YghK65FCuQCCKCc0mnK9F/aPvYOPu",
+      "id": 1
+    }
+  ],
+  "todos": [
+    {
+      "id": 331279,
+      "title": "Learn Redux",
+      "done": false
+    },
+    {
+      "id": 627462,
+      "title": "More practice on React!",
+      "done": true
+    },
+    {
+      "id": 624185,
+      "title": "Read more...",
+      "done": false
+    },
+    {
+      "id": 901151,
+      "title": "12",
+      "done": true
+    },
+    {
+      "id": 793239,
+      "title": "21",
+      "done": true
+    },
+    {
+      "id": 323068,
+      "title": "3",
+      "done": true
+    },
+    {
+      "id": 7,
+      "title": "learning programming",
+      "done": false
+    }
+  ]
+}

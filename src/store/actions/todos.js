@@ -1,5 +1,7 @@
-import axios from "../../utils/axios"
 import { toast } from "react-toastify"
+import axios from "../../utils/axios"
+import { store } from "../../index"
+
 import {
   FETCH_TODOLIST_SUCCESS,
   FETCH_TODOLIST_FAILED,
@@ -16,6 +18,13 @@ import {
   UPDATE_TODO_START,
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILED,
+  FILTER_TODO_START,
+  FILTER_TODO_FAILED,
+  FILTER_TODO_SUCCESS,
+  SEARCH_TODO_START,
+  SEARCH_TODO_SUCCESS,
+  SEARCH_TODO_FAILED,
+  CHANGE_GET_TODO_PARAMS,
 } from "./actionTypes"
 
 const options = {
@@ -25,12 +34,63 @@ const options = {
   pauseOnHover: true,
 }
 
-export const fetchTodoList = () => dispatch => {
-  dispatch(fetchTodoListStart())
+// Filter Todo
+export const filterTodo = done => dispatch => {
+  dispatch(filterTodoStart())
+
   axios
-    .get("/todos")
+    .get("/todos", {
+      params: {
+        done,
+      },
+    })
     .then(response => {
-      dispatch(fetchTodoListSuccess(response.data))
+      dispatch(filterTodoSuccess(response.data, done))
+    })
+    .catch(err => {
+      toast.error(err.message)
+      dispatch(filterTodoFailed(err))
+    })
+}
+
+export const filterTodoStart = () => ({
+  type: FILTER_TODO_START,
+})
+
+export const filterTodoSuccess = (list, done) => ({
+  type: FILTER_TODO_SUCCESS,
+  list,
+  done,
+})
+
+export const filterTodoFailed = error => ({
+  type: FILTER_TODO_FAILED,
+  error,
+})
+
+export const fetchTodoList = payload => dispatch => {
+  dispatch(fetchTodoListStart())
+
+  const [key] = [Object.keys(payload)]
+  const state = store.getState()
+
+  const updatedParams = {
+    ...state.todos.filter,
+    [key]: payload[key],
+  }
+
+  dispatch(changeGetTodoParams(updatedParams))
+
+  axios
+    .get("/todos", {
+      params: updatedParams,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+    .then(response => {
+      dispatch(fetchTodoListSuccess(response))
     })
     .catch(err => {
       toast.error(err.message)
@@ -38,9 +98,15 @@ export const fetchTodoList = () => dispatch => {
     })
 }
 
+export const changeGetTodoParams = payload => ({
+  type: CHANGE_GET_TODO_PARAMS,
+  payload,
+})
+
 export const fetchTodoListSuccess = list => ({
   type: FETCH_TODOLIST_SUCCESS,
-  list,
+  list: list.data,
+  length: list.headers["x-total-count"],
 })
 
 export const fetchTodoListFailed = error => ({
@@ -193,33 +259,33 @@ export const updateTodoFailed = error => ({
   error,
 })
 
-export const addNewTodo = todo => ({
-  type: "ADD_NEW_TODO",
-  todo,
+/**
+ * Search Todo
+ */
+export const searchTodo = title => dispatch => {
+  dispatch(searchTodoStart())
+  axios
+    .get(`/todos?_start=0&_end=3&q=${title}`)
+    .then(response => {
+      dispatch(searchTodoSuccess(response.data))
+    })
+    .catch(err => {
+      toast.error(err.message)
+      dispatch(searchTodoFailed(err))
+    })
+}
+
+export const searchTodoStart = () => ({
+  type: SEARCH_TODO_START,
 })
 
-export const searchTodo = title => ({
-  type: "SEARCH_TODO",
-  title,
+export const searchTodoSuccess = (todos, length) => ({
+  type: SEARCH_TODO_SUCCESS,
+  todos,
+  length,
 })
 
-export const toggleCurrentTodo = id => ({
-  type: "TOGGLE_TODO",
-  id,
-})
-
-export const removeCurrentTodo = id => ({
-  type: "REMOVE_TODO",
-  id,
-})
-
-export const changeBtn = id => ({
-  type: "CHANGE_BTN",
-  id,
-})
-
-export const updateCurrentTodo = (id, title) => ({
-  type: "UPDATE_TODO",
-  id,
-  title,
+export const searchTodoFailed = error => ({
+  type: SEARCH_TODO_FAILED,
+  error,
 })

@@ -15,20 +15,84 @@ import {
   UPDATE_TODO_START,
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILED,
+  FILTER_TODO_SUCCESS,
+  FILTER_TODO_FAILED,
+  FILTER_TODO_START,
+  SEARCH_TODO_START,
+  SEARCH_TODO_SUCCESS,
+  SEARCH_TODO_FAILED,
+  CHANGE_GET_TODO_PARAMS,
 } from "../actions/actionTypes"
 
 const initTodos = []
 
 const initialState = {
   origin: initTodos,
-  filtered: initTodos,
   loadingGet: false,
   loadingPost: false,
   error: null,
+  currentPage: 1,
+  limit: 3,
+  todosLength: 0,
+  token: null,
+  filter: {
+    q: "",
+    _page: 1,
+    _limit: 3,
+    done: null,
+  },
 }
 
 export const todos = (state = initialState, action) => {
   switch (action.type) {
+    case FILTER_TODO_START:
+      return {
+        ...state,
+        loadingGet: true,
+        error: null,
+      }
+    case FILTER_TODO_SUCCESS:
+      return {
+        ...state,
+        origin: action.list,
+        done: action.done,
+        loadingGet: false,
+      }
+    case FILTER_TODO_FAILED:
+      return {
+        ...state,
+        error: action.error,
+        loadingGet: false,
+      }
+
+    case FETCH_TODOLIST_START:
+      return {
+        ...state,
+        loadingGet: true,
+        error: null,
+      }
+    case FETCH_TODOLIST_SUCCESS:
+      return {
+        ...state,
+        origin: action.list,
+        todosLength: action.length,
+        loadingGet: false,
+      }
+
+    case CHANGE_GET_TODO_PARAMS:
+      return {
+        ...state,
+        filter: action.payload,
+        loadingGet: false,
+      }
+
+    case FETCH_TODOLIST_FAILED:
+      return {
+        ...state,
+        error: action.error,
+        loadingGet: false,
+      }
+
     case ADD_TODO_START:
       return {
         ...state,
@@ -39,7 +103,6 @@ export const todos = (state = initialState, action) => {
       return {
         ...state,
         origin: update(state.origin, { $push: [action.todo] }),
-        filtered: update(state.filtered, { $push: [action.todo] }),
         loadingPost: false,
       }
 
@@ -59,7 +122,6 @@ export const todos = (state = initialState, action) => {
     case REMOVE_TODO_SUCCESS:
       return {
         ...state,
-        filtered: state.filtered.filter(todo => todo.id !== action.id),
         origin: state.origin.filter(todo => todo.id !== action.id),
         loadingPost: false,
       }
@@ -80,7 +142,7 @@ export const todos = (state = initialState, action) => {
     case TOGGLE_TODO_SUCCESS:
       return {
         ...state,
-        filtered: state.origin.map(todo => {
+        origin: state.origin.map(todo => {
           if (todo.id === action.id) {
             todo.done = action.todo.done
           }
@@ -105,7 +167,7 @@ export const todos = (state = initialState, action) => {
     case UPDATE_TODO_SUCCESS:
       return {
         ...state,
-        filtered: state.origin.map(todo => {
+        origin: state.origin.map(todo => {
           if (todo.id === action.id) {
             todo.title = action.title
           }
@@ -122,78 +184,27 @@ export const todos = (state = initialState, action) => {
         loadingPost: false,
       }
 
-    case FETCH_TODOLIST_START:
+    case SEARCH_TODO_START:
       return {
         ...state,
         loadingGet: true,
         error: null,
       }
-    case FETCH_TODOLIST_SUCCESS:
+
+    case SEARCH_TODO_SUCCESS:
       return {
         ...state,
-        origin: action.list,
-        filtered: action.list,
+        origin: action.todos,
+        todosLength: action.length,
+        search: action.search,
         loadingGet: false,
       }
 
-    case FETCH_TODOLIST_FAILED:
+    case SEARCH_TODO_FAILED:
       return {
         ...state,
         error: action.error,
         loadingGet: false,
-      }
-
-    case "ADD_NEW_TODO":
-      return {
-        ...state,
-        origin: update(state.origin, { $push: [action.todo] }),
-        filtered: update(state.filtered, { $push: [action.todo] }),
-      }
-    case "SEARCH_TODO":
-      return {
-        ...state,
-        filtered: state.origin.filter(todo =>
-          todo.title.toLowerCase().includes(action.title.toLowerCase()),
-        ),
-      }
-    case "TOGGLE_TODO":
-      return {
-        ...state,
-        filtered: state.origin.map(todo => {
-          if (todo.id === action.id) {
-            todo.done = !todo.done
-          }
-          return todo
-        }),
-      }
-    case "REMOVE_TODO":
-      return {
-        ...state,
-        filtered: state.filtered.filter(todo => todo.id !== action.id),
-        origin: state.origin.filter(todo => todo.id !== action.id),
-        // filtered: update(state.filtered, {
-        //   $splice: [[action.id, 1]],
-        // }),
-      }
-    case "CHANGE_BTN":
-      return {
-        ...state,
-        filtered:
-          action.id !== "all"
-            ? state.origin.filter(todo =>
-                action.id === "completed" ? todo.done : !todo.done,
-              )
-            : state.origin,
-      }
-    case "UPDATE_TODO":
-      return {
-        ...state,
-        filtered: state.origin.map(todo => {
-          if (todo.id === action.id) {
-            todo.title = action.title
-          }
-          return todo
-        }),
       }
 
     default:
