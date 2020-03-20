@@ -24,9 +24,7 @@ import {
   SEARCH_TODO_START,
   SEARCH_TODO_SUCCESS,
   SEARCH_TODO_FAILED,
-  LOGIN_START,
-  LOGIN_SUCCESS,
-  LOGIN_FAILED,
+  CHANGE_GET_TODO_PARAMS,
 } from "./actionTypes"
 
 const options = {
@@ -36,43 +34,9 @@ const options = {
   pauseOnHover: true,
 }
 
-// Auth Login
-export const login = (email, password) => dispatch => {
-  dispatch(loginStart())
-
-  axios
-    .post("/api/login", {
-      email,
-      password,
-    })
-    .then(response => {
-      console.log("response.data", response.data)
-      dispatch(loginSuccess(response.data.token))
-    })
-    .catch(err => {
-      toast.error(err.message)
-      dispatch(loginFailed(err))
-    })
-}
-
-export const loginStart = () => ({
-  type: LOGIN_START,
-})
-
-export const loginSuccess = token => ({
-  type: LOGIN_SUCCESS,
-  token,
-})
-
-export const loginFailed = error => ({
-  type: LOGIN_FAILED,
-  error,
-})
-
 // Filter Todo
 export const filterTodo = done => dispatch => {
   dispatch(filterTodoStart())
-  const state = store.getState()
 
   axios
     .get("/todos", {
@@ -105,28 +69,25 @@ export const filterTodoFailed = error => ({
 })
 
 export const fetchTodoList = payload => dispatch => {
-  // if (Object.keys(payload).length === 0) {
-
-  // }
-
   dispatch(fetchTodoListStart())
+
+  const [key] = [Object.keys(payload)]
   const state = store.getState()
-  console.log("state", state)
-  // console.log("payload", payload)
 
   const updatedParams = {
     ...state.todos.filter,
-    [Object.keys(payload)[0]]: payload[Object.keys(payload)[0]],
+    [key]: payload[key],
   }
-
-  // console.log("Object.keys(payload)[0]", Object.keys(payload)[0])
-  console.log("updatedParams", updatedParams)
 
   dispatch(changeGetTodoParams(updatedParams))
 
   axios
     .get("/todos", {
       params: updatedParams,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
     })
     .then(response => {
       dispatch(fetchTodoListSuccess(response))
@@ -138,7 +99,7 @@ export const fetchTodoList = payload => dispatch => {
 }
 
 export const changeGetTodoParams = payload => ({
-  type: "CHANGE_GET_TODO_PARAMS",
+  type: CHANGE_GET_TODO_PARAMS,
   payload,
 })
 
@@ -302,7 +263,6 @@ export const updateTodoFailed = error => ({
  * Search Todo
  */
 export const searchTodo = title => dispatch => {
-  console.log("searchTodo")
   dispatch(searchTodoStart())
   axios
     .get(`/todos?_start=0&_end=3&q=${title}`)

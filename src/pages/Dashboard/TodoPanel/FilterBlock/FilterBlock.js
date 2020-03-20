@@ -2,7 +2,7 @@ import React, { PureComponent } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 
-import { filterTodo, fetchTodoList } from "../../../../store/actions/todos"
+import { fetchTodoList } from "../../../../store/actions/todos"
 
 import Radio from "../../../../components/UI/Radio/Radio"
 

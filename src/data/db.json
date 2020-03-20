@@ -1,4 +1,11 @@
 {
+  "users": [
+    {
+      "email": "test@test.ru",
+      "password": "$2a$10$DPQat0LOZPtrDA/KxUZjEuS3YghK65FCuQCCKCc0mnK9F/aPvYOPu",
+      "id": 1
+    }
+  ],
   "todos": [
     {
       "id": 331279,

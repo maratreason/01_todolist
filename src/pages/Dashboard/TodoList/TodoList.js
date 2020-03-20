@@ -36,5 +36,6 @@ export default TodoList
 
 const Wrapper = styled.div`
   width: 800px;
+  margin: 0 auto;
   overflow: hidden;
 `

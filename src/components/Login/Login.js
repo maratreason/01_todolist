@@ -1,18 +1,22 @@
 import React, { Component } from "react"
-import { Redirect } from "react-router-dom"
+import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
-
 import styled from "styled-components"
 import { withFormik } from "formik"
 import * as Yup from "yup"
 
+import { login, logout } from "../../store/actions/auth"
+
 import { Input, Checkbox } from "../UI/Input/Input"
 import { Button } from "../UI/Button/Button"
-import { login } from "../../store/actions/todos"
+import Navigation from "../Navigation/Navigation"
 
 class Login extends Component {
-  state = {
-    referrer: "",
+  componentDidUpdate() {
+    const { token } = this.props
+    if (token) {
+      this.props.history.push("/")
+    }
   }
 
   render() {
@@ -22,70 +26,81 @@ class Login extends Component {
       handleSubmit,
       errors,
       isSubmitting,
+      token,
+      logoutUser,
+      history,
     } = this.props
-    const { referrer } = this.state
-
-    if (referrer) return <Redirect to={referrer} />
 
     return (
-      <form action="" onSubmit={handleSubmit}>
-        <Wrapper>
-          <label htmlFor="email">Email</label>
-          <Input
-            type="text"
-            name="email"
-            value={values.email}
-            onChange={handleChange}
-          />
-          <span style={{ color: "red", display: errors ? "block" : "none" }}>
-            {errors.email}
-          </span>
-        </Wrapper>
-        <Wrapper>
-          <label htmlFor="password">Password</label>
-          <Input
-            type="password"
-            name="password"
-            value={values.password}
-            onChange={handleChange}
-          />
-          <span style={{ color: "red", display: errors ? "block" : "none" }}>
-            {errors.password}
-          </span>
-        </Wrapper>
-        <Wrapper>
-          <Checkbox>
-            <label htmlFor="agree">agree</label>
-            <input
-              type="checkbox"
-              name="agree"
-              checked={values.agree}
-              onChange={handleChange}
-            />
-          </Checkbox>
-        </Wrapper>
-        <Button
-          buttonType={values.agree ? "success" : "default"}
-          type="button"
-          disabled={isSubmitting}
-          onClick={() => {
-            handleSubmit()
-            this.setState({ referrer: "/" })
-          }}
-        >
-          Submit
-        </Button>
-      </form>
+      <WrapperComponent>
+        <Navigation token={token} logoutUser={logoutUser} history={history} />
+
+        {!token ? (
+          <form action="" onSubmit={handleSubmit}>
+            <Wrapper>
+              <label htmlFor="email">Email</label>
+              <Input
+                type="text"
+                name="email"
+                value={values.email}
+                onChange={handleChange}
+              />
+              <span
+                style={{ color: "red", display: errors ? "block" : "none" }}
+              >
+                {errors.email}
+              </span>
+            </Wrapper>
+            <Wrapper>
+              <label htmlFor="password">Password</label>
+              <Input
+                type="password"
+                name="password"
+                value={values.password}
+                onChange={handleChange}
+              />
+              <span
+                style={{ color: "red", display: errors ? "block" : "none" }}
+              >
+                {errors.password}
+              </span>
+            </Wrapper>
+            <Wrapper>
+              <Checkbox>
+                <label htmlFor="agree">agree</label>
+                <input
+                  type="checkbox"
+                  name="agree"
+                  checked={values.agree}
+                  onChange={handleChange}
+                />
+              </Checkbox>
+            </Wrapper>
+            <Button
+              buttonType={values.agree ? "success" : "default"}
+              type="button"
+              disabled={isSubmitting}
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </form>
+        ) : (
+          <h1>Вы уже авторизованы</h1>
+        )}
+      </WrapperComponent>
     )
   }
 }
 
 const FormikLogin = withFormik({
-  mapPropsToValues: () => ({
-    email: "",
-    password: "12345678",
-    agree: false,
-  }),
+  mapPropsToValues: () => {
+    return {
+      email: "test@test.ru",
+      password: "1111",
+      agree: true,
+    }
+  },
 
   validationSchema: Yup.object().shape({
     email: Yup.string()
@@ -93,35 +108,45 @@ const FormikLogin = withFormik({
       .required("Email is required"),
     password: Yup.string()
       .required("Password is required")
-      .min(6, "password must have 6 characters"),
+      .min(3, "password must have 3 characters"),
     agree: Yup.bool().oneOf([true], "Accept Terms & Conditions is required"),
   }),
 
-  handleSubmit: (values, { setSubmitting, setErrors, resetForm }) => {
-    setTimeout(() => {
-      if (values.email === "test@test.ru") {
-        setErrors({ email: "That email is already taken" })
-        console.log(values)
-      } else {
-        console.log(values.email, values.password)
-        login(values.email, values.password)
-        resetForm()
-      }
-      setSubmitting(false)
-    }, 2000)
+  handleSubmit: (values, { setSubmitting, resetForm, props }) => {
+    props.login(values.email, values.password)
+    resetForm()
+    setSubmitting(false)
   },
 })(Login)
+
+const mapStateToProps = state => {
+  return {
+    token: state.auth.token,
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
     login: (email, password) => dispatch(login(email, password)),
+    logoutUser: () => dispatch(logout()),
   }
 }
 
-export default connect(null, mapDispatchToProps)(FormikLogin)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withRouter(FormikLogin))
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin: 1rem 0;
+  width: 100%;
+`
+
+const WrapperComponent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
 `

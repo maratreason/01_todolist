@@ -21,53 +21,30 @@ import {
   SEARCH_TODO_START,
   SEARCH_TODO_SUCCESS,
   SEARCH_TODO_FAILED,
-  LOGIN_START,
-  LOGIN_SUCCESS,
-  LOGIN_FAILED,
+  CHANGE_GET_TODO_PARAMS,
 } from "../actions/actionTypes"
 
 const initTodos = []
 
 const initialState = {
   origin: initTodos,
-  filtered: initTodos,
   loadingGet: false,
   loadingPost: false,
   error: null,
   currentPage: 1,
   limit: 3,
   todosLength: 0,
-  token: "",
+  token: null,
   filter: {
-    title: null,
-    // _page: 1,
-    // _limit: 3,
+    q: "",
+    _page: 1,
+    _limit: 3,
     done: null,
   },
 }
 
 export const todos = (state = initialState, action) => {
   switch (action.type) {
-    case LOGIN_START:
-      return {
-        ...state,
-        loadingGet: true,
-        error: null,
-      }
-    case LOGIN_SUCCESS:
-      return {
-        ...state,
-        token: action.token,
-        loadingGet: false,
-      }
-
-    case LOGIN_FAILED:
-      return {
-        ...state,
-        error: action.error,
-        loadingGet: false,
-      }
-
     case FILTER_TODO_START:
       return {
         ...state,
@@ -101,8 +78,8 @@ export const todos = (state = initialState, action) => {
         todosLength: action.length,
         loadingGet: false,
       }
-    case "CHANGE_GET_TODO_PARAMS":
-      console.log("action.payload", action.payload)
+
+    case CHANGE_GET_TODO_PARAMS:
       return {
         ...state,
         filter: action.payload,

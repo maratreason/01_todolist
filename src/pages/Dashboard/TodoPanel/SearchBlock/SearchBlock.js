@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 
-import { searchTodo, fetchTodoList } from "../../../../store/actions/todos"
+import { fetchTodoList } from "../../../../store/actions/todos"
 
 import { SearchInput } from "../../../../components/UI/Input/Input"
 
@@ -36,7 +36,7 @@ class SearchBlock extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  searchByTitle: search => dispatch(fetchTodoList({ title: search })),
+  searchByTitle: search => dispatch(fetchTodoList({ q: search })),
 })
 
 export default connect(null, mapDispatchToProps)(SearchBlock)
