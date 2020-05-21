@@ -8,12 +8,9 @@ import thunk from "redux-thunk"
 import App from "./App"
 import rootReducer from "./store/reducers"
 
-const composeEnhanters = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+// const composeEnhanters = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 
-export const store = createStore(
-  rootReducer,
-  composeEnhanters(applyMiddleware(thunk)),
-)
+export const store = createStore(rootReducer, applyMiddleware(thunk))
 
 ReactDOM.render(
   <Router>
